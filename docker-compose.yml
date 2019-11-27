@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  localstack:
+    image: localstack/localstack:0.10.5
+    ports:
+      - "4567-4593:4567-4593"
+    environment:
+      - SERVICES=serverless
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_EXECUTOR=docker
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  deployment:
+    build:
+      context: .
+      dockerfile: Dockerfile-TF
+    environment:
+      - AWS_ACCESS_KEY_ID="dummy_id"
+      - AWS_SECRET_ACCESS_KEY="dummy_key"
+    depends_on:
+      - localstack
+
+  testing:
+    build:
+      context: .
+      dockerfile: Dockerfile-Tests
+    depends_on:
+      - deployment
+

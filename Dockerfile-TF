@@ -1,0 +1,19 @@
+FROM alpine:3.10.2
+
+RUN mkdir /build
+
+RUN apk update && \
+    apk add bash curl python3 unzip wget zip && \
+    cd /tmp && \
+    wget https://releases.hashicorp.com/terraform/0.12.16/terraform_0.12.16_linux_amd64.zip && \
+    unzip terraform_0.12.16_linux_amd64.zip -d /usr/bin
+
+COPY deployment /build/deployment
+COPY lambda /build/lambda
+COPY scripts/deploy.sh /build
+
+RUN chmod +x /build/deploy.sh
+
+WORKDIR /build
+
+ENTRYPOINT ["/bin/bash", "./deploy.sh"]
