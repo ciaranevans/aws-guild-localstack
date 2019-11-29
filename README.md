@@ -1,5 +1,10 @@
 # How Data Engineering use LocalStack for AWS Development λ ☁ 🛠
 
+## Prerequisites
+
+* `docker`
+* `docker-compose` (Version 3 is what the project expects)
+
 ## What's this?
 
 This repo contains an example project which is similar in structure to `UKHO/s2-classification-lambda-pipeline`
